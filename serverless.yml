@@ -26,13 +26,11 @@ provider:
   runtime: nodejs8.10
   stage: dev
   region: eu-central-1
-
   # These environment variables are made available to our functions
   # under process.env.
   environment:
     tableName:
       Ref: NotesTable
-
   iamRoleStatements:
     - Effect: Allow
       Action:
@@ -63,7 +61,6 @@ functions:
           method: post
           cors: true
           authorizer: aws_iam
-
   get:
     # Defines an HTTP API endpoint that calls the main function in get.js
     # - path: url path is /notes/{id}
@@ -75,7 +72,6 @@ functions:
           method: get
           cors: true
           authorizer: aws_iam
-
   list:
     # Defines an HTTP API endpoint that calls the main function in list.js
     # - path: url path is /notes
@@ -87,7 +83,6 @@ functions:
           method: get
           cors: true
           authorizer: aws_iam
-
   update:
     # Defines an HTTP API endpoint that calls the main function in update.js
     # - path: url path is /notes/{id}
@@ -99,7 +94,6 @@ functions:
           method: put
           cors: true
           authorizer: aws_iam
-
   delete:
     # Defines an HTTP API endpoint that calls the main function in delete.js
     # - path: url path is /notes/{id}
@@ -121,3 +115,11 @@ resources:
   # Cognito
   - ${file(resources/cognito-user-pool.yml)}
   - ${file(resources/cognito-identity-pool.yml)}
+  billing:
+    handler: billing.main
+    events:
+      - http:
+          path: billing
+          method: post
+          cors: true
+          authorizer: aws_iam
